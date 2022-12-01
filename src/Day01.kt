@@ -33,7 +33,6 @@ fun main() {
         }
         if (current > max[0]) {
             max[0] = current
-            max.sort()
         }
         return max.sum()
     }
