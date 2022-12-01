@@ -1,39 +1,39 @@
 fun main() {
     fun part1(input: List<String>): Int {
-        var max = 0;
-        var current = 0;
+        var max = 0
+        var current = 0
         for (line in input) {
             if (line.isEmpty()) {
-                max = max.coerceAtLeast(current);
-                current = 0;
-                continue;
+                max = max.coerceAtLeast(current)
+                current = 0
+                continue
             }
-            val value = Integer.parseInt(line);
-            current += value;
+            val value = Integer.parseInt(line)
+            current += value
         }
-        return max.coerceAtLeast(current);
+        return max.coerceAtLeast(current)
     }
 
     /// Find top 3
     fun part2(input: List<String>): Int {
-        var max = arrayListOf(0, 0, 0);
-        var current = 0;
+        var max = arrayListOf(0, 0, 0)
+        var current = 0
         for (line in input) {
             if (line.isEmpty()) {
                 if (current > max[0]) {
-                    max[0] = current;
-                    max.sort();
+                    max[0] = current
+                    max.sort()
                 }
 
-                current = 0;
-                continue;
+                current = 0
+                continue
             }
-            val value = Integer.parseInt(line);
-            current += value;
+            val value = Integer.parseInt(line)
+            current += value
         }
         if (current > max[0]) {
-            max[0] = current;
-            max.sort();
+            max[0] = current
+            max.sort()
         }
         return max.sum()
     }
