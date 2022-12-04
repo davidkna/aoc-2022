@@ -14,7 +14,7 @@ fun main() {
         return max.coerceAtLeast(current)
     }
 
-    /// Find top 3
+    // Find top 3
     fun part2(input: List<String>): Int {
         var max = arrayListOf(0, 0, 0)
         var current = 0
