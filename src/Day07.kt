@@ -1,7 +1,7 @@
 fun main() {
-    fun parseInput(input: List<String>): HashMap<String, Int> {
-        val fs = HashMap<String, Int>()
-        var pwd = ArrayDeque<String>()
+    fun parseInput(input: List<String>): HashMap<List<String>, Int> {
+        val fs = HashMap<List<String>, Int>()
+        var pwd = ArrayList<String>()
         for (line in input) {
             if (line.startsWith("$ cd")) {
                 when (val newLocation = line.removePrefix("$ cd ")) {
@@ -9,27 +9,21 @@ fun main() {
                         pwd.removeLast()
                     }
                     "/" -> {
-                        pwd = ArrayDeque()
+                        pwd = ArrayList()
                     }
                     else -> {
-                        pwd.addLast(newLocation)
+                        pwd.add(newLocation)
                     }
                 }
             }
             val size = line.split(' ').first()
             if (size != "dir" && !size.startsWith("$")) {
-                val pwdString = pwd.joinToString("/")
-                if (fs.containsKey(pwdString)) {
-                    fs[pwdString] = fs[pwdString]!! + size.toInt()
-                } else {
-                    fs[pwdString] = size.toInt()
-                }
-                for (i in pwd.indices) {
-                    val parentPwdString = pwd.subList(0, i).joinToString("/")
-                    if (fs.containsKey(parentPwdString)) {
-                        fs[parentPwdString] = fs[parentPwdString]!! + size.toInt()
+                for (i in 0..pwd.size) {
+                    val cursor = pwd.subList(0, i).toList()
+                    if (fs.containsKey(cursor)) {
+                        fs[cursor] = fs[cursor]!! + size.toInt()
                     } else {
-                        fs[parentPwdString] = size.toInt()
+                        fs[cursor] = size.toInt()
                     }
                 }
             }
@@ -45,7 +39,7 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         val fs = parseInput(input)
-        val totalSize = fs[""]!!
+        val totalSize = fs[listOf()]!!
 
         return fs.values.filter { totalSize - it < 40000000 }.min()
     }
