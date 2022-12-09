@@ -26,11 +26,8 @@ fun main() {
 
         for (move in moves) {
             (0 until max(abs(move.first), abs(move.second))).forEach { _ ->
-                rope[0] = if (move.first != 0) {
-                    Pair(rope[0].first + move.first.sign, rope[0].second)
-                } else {
-                    Pair(rope[0].first, rope[0].second + move.second.sign)
-                }
+                rope[0] = Pair(rope[0].first + move.first.sign, rope[0].second + move.second.sign)
+
                 rope.indices.drop(1).forEach { i ->
                     val head = rope[i - 1]
                     val tail = rope[i]
