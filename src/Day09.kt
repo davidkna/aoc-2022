@@ -21,8 +21,7 @@ fun main() {
         val rope = Array(len + 1) { Pair(0, 0) }
 
         val moves = parseInput(input)
-        val visited = mutableSetOf<Pair<Int, Int>>()
-        visited.add(Pair(0, 0))
+        val visited = mutableSetOf(Pair(0, 0))
 
         for (move in moves) {
             (0 until max(abs(move.first), abs(move.second))).forEach { _ ->
