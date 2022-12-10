@@ -5,16 +5,16 @@ import kotlin.math.sign
 fun main() {
     fun parseInput(input: List<String>): List<Pair<Int, Int>> {
         return input.map { l ->
-                val (direction, steps) = l.split(" ")
-                val stepsInt = steps.toInt()
-                return@map when (direction) {
-                    "R" -> Pair(stepsInt, 0)
-                    "L" -> Pair(-stepsInt, 0)
-                    "U" -> Pair(0, stepsInt)
-                    "D" -> Pair(0, -stepsInt)
-                    else -> throw Exception("Unknown direction")
-                }
-            }.toList()
+            val (direction, steps) = l.split(" ")
+            val stepsInt = steps.toInt()
+            return@map when (direction) {
+                "R" -> Pair(stepsInt, 0)
+                "L" -> Pair(-stepsInt, 0)
+                "U" -> Pair(0, stepsInt)
+                "D" -> Pair(0, -stepsInt)
+                else -> throw Exception("Unknown direction")
+            }
+        }.toList()
     }
 
     fun solution(input: List<String>, len: Int): Int {
