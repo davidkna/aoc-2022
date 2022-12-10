@@ -1,45 +1,37 @@
 fun main() {
     fun part1(input: List<String>): Int {
-        val ins = input.asReversed().toMutableList()
-
         var x = 1
         var signalStrength = 0
         var cycle = -19
 
-        while (ins.isNotEmpty()) {
-            val s = ins.removeLast().split(" ")
-            var cycleDuration = 0
-            when (s[0]) {
-                "noop" -> cycleDuration = 1
-                "addx" -> cycleDuration = 2
+        input.map { it.split(" ") }.forEach { ins ->
+            val cycleDuration = when (ins[0]) {
+                "noop" -> 1
+                "addx" -> 2
+                else -> throw Exception("Unknown instruction")
             }
             for (i in 1..cycleDuration) {
                 if (cycle % 40 == 0) {
                     signalStrength += x * (cycle + 20)
                 }
-                if (s[0] == "addx" && i == cycleDuration) {
-                    x += s[1].toInt()
-                }
                 cycle++
             }
+            x += ins.getOrElse(1) { "0" }.toInt()
         }
 
         return signalStrength
     }
 
     fun part2(input: List<String>): String {
-        val ins = input.asReversed().toMutableList()
         val output = arrayListOf(Array(40) { '.' })
-
         var x = 1
         var cycle = 0
 
-        while (ins.isNotEmpty()) {
-            val s = ins.removeLast().split(" ")
-            var cycleDuration = 0
-            when (s[0]) {
-                "noop" -> cycleDuration = 1
-                "addx" -> cycleDuration = 2
+        input.map { it.split(" ") }.forEach { ins ->
+            val cycleDuration = when (ins[0]) {
+                "noop" -> 1
+                "addx" -> 2
+                else -> throw Exception("Unknown instruction")
             }
             for (i in 1..cycleDuration) {
                 if ((x - 1..x + 1).contains(cycle % 40)) {
@@ -48,11 +40,9 @@ fun main() {
                     }
                     output[cycle / 40][cycle % 40] = '#'
                 }
-                if (s[0] == "addx" && i == cycleDuration) {
-                    x += s[1].toInt()
-                }
                 cycle++
             }
+            x += ins.getOrElse(1) { "0" }.toInt()
         }
 
         return output.joinToString("\n") { it.joinToString("") }
