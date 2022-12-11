@@ -1,47 +1,46 @@
-import java.math.BigInteger
 
 enum class Op { ADD, MUL, SQUARE }
 
 fun main() {
     class Monkey(
-        var items: ArrayDeque<BigInteger>,
-        var op: Pair<Op, Int>,
-        var test: Int,
-        var decision: Pair<Int, Int>
+        var items: ArrayDeque<Long>,
+        var op: Pair<Op, Long>,
+        var test: Long,
+        var decision: Pair<Long, Long>
     ) {
         var count = 0
 
-        fun add(x: BigInteger) {
+        fun add(x: Long) {
             items.addLast(x)
         }
 
-        fun take(): BigInteger {
+        fun take(): Long {
             count++
             return items.removeFirst()
         }
     }
 
-    fun solution(input: List<List<String>>, relief: Boolean, rounds: Int): Long {
+    fun solution(input: List<List<String>>, relief: Boolean, rounds: Long): Long {
         val monkeys = input.map {
                 description ->
-            val items = description[1].substring(18).split(", ").map { it.toBigInteger() }
+            val items = description[1].substring(18).split(", ").map { it.toLong() }
             val op = when (description[2][23]) {
-                '+' -> Pair(Op.ADD, description[2].substring(25).toInt())
+                '+' -> Pair(Op.ADD, description[2].substring(25).toLong())
                 '*' -> {
                     if (description[2].substring(25) == "old") {
-                        Pair(Op.SQUARE, 1)
+                        Pair(Op.SQUARE, 1L)
                     } else {
-                        Pair(Op.MUL, description[2].substring(25).toInt())
+                        Pair(Op.MUL, description[2].substring(25).toLong())
                     }
                 }
                 else -> throw Exception("Unknown op")
             }
-            val test = description[3].substring(21).toInt()
-            val decision = Pair(description[4].substring(29).toInt(), description[5].substring(30).toInt())
+            val test = description[3].substring(21).toLong()
+            val decision = Pair(description[4].substring(29).toLong(), description[5].substring(30).toLong())
             Monkey(ArrayDeque(items), op, test, decision)
         }.toMutableList()
 
-        //val modBy = monkeys.map(Monkey::test).reduce { acc, i -> acc * i }
+        val modBy = monkeys.map(Monkey::test).reduce { acc, i -> acc * i }
 
         for (round in 1..rounds) {
             for (monkey in monkeys) {
@@ -49,22 +48,22 @@ fun main() {
                     var item = monkey.take()
 
                     when (monkey.op.first) {
-                        Op.ADD -> item += monkey.op.second.toBigInteger()
-                        Op.MUL -> item *= monkey.op.second.toBigInteger()
+                        Op.ADD -> item += monkey.op.second
+                        Op.MUL -> item *= monkey.op.second
                         Op.SQUARE -> item *= item
                     }
                     if (relief) {
-                        item /= 3.toBigInteger()
+                        item /= 3.toLong()
                     }
-                    //item %= modBy
-                    if (item % monkey.test.toBigInteger() == 0.toBigInteger()) {
-                        monkeys[monkey.decision.first].add(item)
+                    item %= modBy
+                    if (item % monkey.test == 0L) {
+                        monkeys[monkey.decision.first.toInt()].add(item)
                     } else {
-                        monkeys[monkey.decision.second].add(item)
+                        monkeys[monkey.decision.second.toInt()].add(item)
                     }
                 }
             }
-            if (listOf(1, 20, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000).contains(round)) {
+            if (listOf(1, 20, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000).contains(round.toInt())) {
                 println("Round $round")
                 for (monkey in monkeys) {
                     println("  Monkey ${monkeys.indexOf(monkey)}: ${monkey.count}")
@@ -79,7 +78,6 @@ fun main() {
 
     val testInput = readInputDoubleNewline("Day11_test")
     check(solution(testInput, true, 20) == 10605L)
-    //println(solution(testInput, false, 10000))
     check(solution(testInput, false, 10000) == 2713310158)
 
     val input = readInputDoubleNewline("Day11")
