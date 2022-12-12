@@ -1,10 +1,10 @@
 
-enum class Op { ADD, MUL, SQUARE }
+enum class MonkeyOp { ADD, MUL, SQUARE }
 
 fun main() {
     class Monkey(
         var items: ArrayDeque<Long>,
-        var op: Pair<Op, Long>,
+        var op: Pair<MonkeyOp, Long>,
         var test: Long,
         var decision: Pair<Long, Long>
     ) {
@@ -25,12 +25,12 @@ fun main() {
                 description ->
             val items = description[1].substring(18).split(", ").map { it.toLong() }
             val op = when (description[2][23]) {
-                '+' -> Pair(Op.ADD, description[2].substring(25).toLong())
+                '+' -> Pair(MonkeyOp.ADD, description[2].substring(25).toLong())
                 '*' -> {
                     if (description[2].substring(25) == "old") {
-                        Pair(Op.SQUARE, 1L)
+                        Pair(MonkeyOp.SQUARE, 1L)
                     } else {
-                        Pair(Op.MUL, description[2].substring(25).toLong())
+                        Pair(MonkeyOp.MUL, description[2].substring(25).toLong())
                     }
                 }
                 else -> throw Exception("Unknown op")
@@ -48,9 +48,9 @@ fun main() {
                     var item = monkey.take()
 
                     when (monkey.op.first) {
-                        Op.ADD -> item += monkey.op.second
-                        Op.MUL -> item *= monkey.op.second
-                        Op.SQUARE -> item *= item
+                        MonkeyOp.ADD -> item += monkey.op.second
+                        MonkeyOp.MUL -> item *= monkey.op.second
+                        MonkeyOp.SQUARE -> item *= item
                     }
                     if (relief) {
                         item /= 3.toLong()
