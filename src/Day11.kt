@@ -6,7 +6,7 @@ fun main() {
         var items: ArrayDeque<Long>,
         var op: Pair<MonkeyOp, Long>,
         var test: Long,
-        var decision: Pair<Long, Long>
+        var decision: Pair<Long, Long>,
     ) {
         var count = 0
 
