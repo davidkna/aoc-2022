@@ -77,9 +77,6 @@ fun main() {
         val shortestPaths = findShortestPaths(valves)
         val cache = mutableMapOf<Triple<Pair<Int, Int>, Pair<Int, Int>, BitSet>, Int>()
         fun makeBestChoice(current: Pair<Int, Int>, remainingSteps: Pair<Int, Int>, opened: BitSet): Int {
-            if (remainingSteps.first < 0 && remainingSteps.second < 0) {
-                return 0
-            }
             if (remainingSteps.first < remainingSteps.second) {
                 return makeBestChoice(current.swap(), remainingSteps.swap(), opened)
             }
