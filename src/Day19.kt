@@ -1,16 +1,17 @@
 import java.util.PriorityQueue
+
 fun main() {
     class Blueprint(val id: Int, val ore: Int, val clay: Int, val obsidian: Pair<Int, Int>, val geode: Pair<Int, Int>) {
         fun eval(maxTime: Int): Int {
             val queue = PriorityQueue<List<Int>>(
-                compareBy {
+                compareBy<List<Int>> {
                     val time = it[0]
                     val geodeBots = it[4]
                     val geode = it[8]
                     val timeLeft = maxTime - time
                     val potentialExtraBots = if (timeLeft > 1) (timeLeft + 1) * (timeLeft) / 2 else 0
-                    9999999 - (geode + geodeBots * timeLeft + potentialExtraBots)
-                },
+                    geode + geodeBots * timeLeft + potentialExtraBots
+                }.reversed()
             )
             queue.add(listOf(0, 1, 0, 0, 0, 0, 0, 0, 0))
 
