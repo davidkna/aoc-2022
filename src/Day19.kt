@@ -1,6 +1,7 @@
 import java.util.PriorityQueue
 
 fun main() {
+    fun Boolean.toInt() = if (this) 1 else 0
     class Blueprint(val id: Int, val ore: Int, val clay: Int, val obsidian: Pair<Int, Int>, val geode: Pair<Int, Int>) {
         fun eval(maxTime: Int): Int {
             val queue = PriorityQueue<List<Int>>(
@@ -11,7 +12,7 @@ fun main() {
                     val timeLeft = maxTime - time
                     val potentialExtraBots = if (timeLeft > 1) (timeLeft + 1) * (timeLeft) / 2 else 0
                     geode + geodeBots * timeLeft + potentialExtraBots
-                }.reversed()
+                }.reversed(),
             )
             queue.add(listOf(0, 1, 0, 0, 0, 0, 0, 0, 0))
 
@@ -50,35 +51,102 @@ fun main() {
                 val qSize = queue.size
 
                 if (ore >= this.geode.first && obsidian >= this.geode.second) {
-                    queue.add(listOf(time + 1, oreBots, clayBots, obsidianBots, geodeBots + 1, oreNextStep - this.geode.first, clayNextStep, obsidianNextStep - this.geode.second, geodeNextStep))
+                    queue.add(
+                        listOf(
+                            time + 1,
+                            oreBots,
+                            clayBots,
+                            obsidianBots,
+                            geodeBots + 1,
+                            oreNextStep - this.geode.first,
+                            clayNextStep,
+                            obsidianNextStep - this.geode.second,
+                            geodeNextStep,
+                        ),
+                    )
                     continue
                 }
 
-                if (oreBots <= maxOreBots && ore >= this.ore) {
-                    queue.add(listOf(time + 1, oreBots + 1, clayBots, obsidianBots, geodeBots, oreNextStep - this.ore, clayNextStep, obsidianNextStep, geodeNextStep))
+                if (oreBots < maxOreBots && ore >= this.ore) {
+                    queue.add(
+                        listOf(
+                            time + 1,
+                            oreBots + 1,
+                            clayBots,
+                            obsidianBots,
+                            geodeBots,
+                            oreNextStep - this.ore,
+                            clayNextStep,
+                            obsidianNextStep,
+                            geodeNextStep,
+                        ),
+                    )
                 }
 
-                if (obsidianBots <= maxObsidianBots && ore >= this.obsidian.first && clay >= this.obsidian.second) {
-                    queue.add(listOf(time + 1, oreBots, clayBots, obsidianBots + 1, geodeBots, oreNextStep - this.obsidian.first, clayNextStep - this.obsidian.second, obsidianNextStep, geodeNextStep))
+                if (obsidianBots < maxObsidianBots && ore >= this.obsidian.first && clay >= this.obsidian.second) {
+                    queue.add(
+                        listOf(
+                            time + 1,
+                            oreBots,
+                            clayBots,
+                            obsidianBots + 1,
+                            geodeBots,
+                            oreNextStep - this.obsidian.first,
+                            clayNextStep - this.obsidian.second,
+                            obsidianNextStep,
+                            geodeNextStep,
+                        ),
+                    )
                 }
 
-                if (clayBots <= maxClayBots && ore >= this.clay) {
-                    queue.add(listOf(time + 1, oreBots, clayBots + 1, obsidianBots, geodeBots, oreNextStep - this.clay, clayNextStep, obsidianNextStep, geodeNextStep))
+                if (clayBots < maxClayBots && ore >= this.clay) {
+                    queue.add(
+                        listOf(
+                            time + 1,
+                            oreBots,
+                            clayBots + 1,
+                            obsidianBots,
+                            geodeBots,
+                            oreNextStep - this.clay,
+                            clayNextStep,
+                            obsidianNextStep,
+                            geodeNextStep,
+                        ),
+                    )
                 }
 
-                if (qSize + 3 != queue.size) {
-                    queue.add(listOf(time + 1, oreBots, clayBots, obsidianBots, geodeBots, oreNextStep, clayNextStep, obsidianNextStep, geodeNextStep))
+                if (qSize + (oreBots < maxOreBots).toInt() + (obsidianBots < maxObsidianBots).toInt() + (clayBots < maxClayBots).toInt() != queue.size) {
+                    queue.add(
+                        listOf(
+                            time + 1,
+                            oreBots,
+                            clayBots,
+                            obsidianBots,
+                            geodeBots,
+                            oreNextStep,
+                            clayNextStep,
+                            obsidianNextStep,
+                            geodeNextStep,
+                        ),
+                    )
                 }
             }
-            return 0
+            throw IllegalStateException("No solution found")
         }
     }
 
     fun parseInput(input: List<String>): List<Blueprint> {
-        val regex = Regex("Blueprint (\\d+): Each ore robot costs (\\d+) ore. Each clay robot costs (\\d+) ore. Each obsidian robot costs (\\d+) ore and (\\d+) clay. Each geode robot costs (\\d+) ore and (\\d+) obsidian.")
+        val regex =
+            Regex("Blueprint (\\d+): Each ore robot costs (\\d+) ore. Each clay robot costs (\\d+) ore. Each obsidian robot costs (\\d+) ore and (\\d+) clay. Each geode robot costs (\\d+) ore and (\\d+) obsidian.")
         return input.map {
             val (id, ore, clay, obsidian, clay2, geode, obsidian2) = regex.find(it)!!.destructured
-            Blueprint(id.toInt(), ore.toInt(), clay.toInt(), obsidian.toInt() to clay2.toInt(), geode.toInt() to obsidian2.toInt())
+            Blueprint(
+                id.toInt(),
+                ore.toInt(),
+                clay.toInt(),
+                obsidian.toInt() to clay2.toInt(),
+                geode.toInt() to obsidian2.toInt(),
+            )
         }
     }
 
