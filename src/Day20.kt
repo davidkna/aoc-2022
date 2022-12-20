@@ -7,11 +7,12 @@ fun main() {
         out.indices.forEach { idx ->
             val currentItem = out.withIndex().find { it.value.first == idx }!!
             val moves = currentItem.value.second
+            val newIdx = (currentItem.index + moves).mod(out.size - 1)
 
-            if (moves == 0L) return@forEach
+            if (newIdx == currentItem.index) return@forEach
 
             out.removeAt(currentItem.index)
-            out.add((currentItem.index + moves).mod(out.size), currentItem.value)
+            out.add(newIdx, currentItem.value)
         }
     }
 
