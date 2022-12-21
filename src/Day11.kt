@@ -1,5 +1,5 @@
 
-enum class MonkeyOp { ADD, MUL, SQUARE }
+private enum class MonkeyOp { ADD, MUL, SQUARE }
 
 fun main() {
     class Monkey(
