@@ -24,7 +24,7 @@ fun main() {
     fun addToNewPositions(
         p: Pair<Int, Int>,
         target: Pair<Int, Int>,
-        newPositions: MutableMap<Pair<Int, Int>, MutableList<Pair<Int, Int>>>
+        newPositions: MutableMap<Pair<Int, Int>, MutableList<Pair<Int, Int>>>,
     ) {
         if (target !in newPositions) {
             newPositions[target] = mutableListOf(p)
